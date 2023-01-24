@@ -1,0 +1,57 @@
+package Model;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+public class Müþteri extends User {
+	String bakiye, iban, hesaptürü;
+
+	public Müþteri() {
+		super();
+	}
+
+	public Müþteri(int id, String tcno, String name, String password, String type, String bakiye, String iban,
+			String hesaptürü) {
+		super(id, tcno, name, password, type);
+		this.bakiye = bakiye;
+		this.iban = iban;
+		this.hesaptürü = hesaptürü;
+	}
+
+	public Müþteri(int id, String tcno, String name, String password, String type) {
+		super(id, tcno, name, password, type);
+	}
+
+	
+	public ArrayList<User> getMüþteriList() throws SQLException {
+		ArrayList<User> list = new ArrayList<>();
+		Connection con = conn.connDb();
+		Statement st = null;
+		ResultSet rs = null;
+		User obj;
+		try {
+			st = con.createStatement();
+			rs = st.executeQuery("SELECT * FROM user WHERE type = 'müþteri'");
+			while (rs.next()) {
+				obj = new User(rs.getInt("id"), rs.getString("tcno"), rs.getString("name"), rs.getString("password"),rs.getString("type"));
+				list.add(obj);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			st.close();
+			rs.close();
+			con.close();
+		}
+		return list;
+	}
+	
+	
+	
+	
+	
+}

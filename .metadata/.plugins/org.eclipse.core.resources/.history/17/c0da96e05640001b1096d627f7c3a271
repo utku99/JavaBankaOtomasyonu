@@ -1,0 +1,104 @@
+package Windows;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import Helper.DBConnection;
+
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.awt.event.ActionEvent;
+import javax.swing.JTextPane;
+
+public class Bakiye extends JFrame {
+
+	private DBConnection conn=new DBConnection();
+	private JPanel contentPane;
+	private JTextField fld_bakiye;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Bakiye frame = new Bakiye();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Bakiye() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 283, 182);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		fld_bakiye = new JTextField();
+		fld_bakiye.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Connection con = null;
+				try {
+					con = conn.connDb();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				java.sql.Statement st = null;
+				try {
+					st = con.createStatement();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				ResultSet rs = null;
+				try {
+					rs = st.executeQuery("SELECT * FROM hesap WHERE tcno = '2'");
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				try {
+					if(rs.next()) {
+						fld_bakiye.setText(rs.getString("tcno"));
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		fld_bakiye.setBounds(10, 50, 131, 32);
+		contentPane.add(fld_bakiye);
+		fld_bakiye.setColumns(10);
+		
+		JButton btnk = new JButton("\u00C7\u0131k\u0131\u015F");
+		btnk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnk.setBounds(151, 50, 106, 32);
+		contentPane.add(btnk);
+	}
+}

@@ -1,0 +1,165 @@
+package Windows;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
+
+import Model.Hesap;
+import Model.Müþteri;
+
+import java.awt.Color;
+import javax.swing.JLabel;
+import java.awt.Font;
+import java.sql.SQLException;
+
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JScrollBar;
+import javax.swing.JRadioButton;
+import javax.swing.JCheckBox;
+import javax.swing.JTree;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JList;
+
+public class HesaplarGUI extends JFrame {
+
+	static Hesap hesap=new Hesap();
+	private JPanel contentPane;
+	private JTextField textField_3;
+	private JTable table;
+	private DefaultTableModel hesapModel = null;
+	private Object[] hesapData = null;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					HesaplarGUI frame = new HesaplarGUI(hesap);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 * @throws SQLException 
+	 */
+	public HesaplarGUI(Hesap hesap ) throws SQLException {
+		
+		hesapModel = new DefaultTableModel();
+		Object[] colhesapName = new Object[4];
+		colhesapName[0] = "TC NO";
+		colhesapName[1] = "BAKÝYE";
+		colhesapName[2] = "IBAN";
+		colhesapName[3] = "HESAP TÜRÜ";
+		hesapModel.setColumnIdentifiers(colhesapName);
+		hesapData = new Object[4];
+		for (int i = 0; i < hesap.getHesapList().size(); i++) {
+			hesapData[0] = hesap.getHesapList().get(i).getTcno();
+			hesapData[1] = hesap.getHesapList().get(i).getId();
+			hesapData[2] = hesap.getHesapList().get(i).getTcno();
+			hesapData[3] = hesap.getHesapList().get(i).getTcno();
+			hesapModel.addRow(hesapData);
+			
+			
+		}
+		
+		
+		setTitle("Hesap Ekleme \u00C7\u0131karma");
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 750, 500);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
+		
+		JPanel panel = new JPanel();
+		panel.setToolTipText("");
+		panel.setBackground(Color.WHITE);
+		contentPane.add(panel, BorderLayout.CENTER);
+		panel.setLayout(null);
+		
+		JLabel lblHesapTr = new JLabel("Hesap T\u00FCr\u00FC");
+		lblHesapTr.setBounds(526, 207, 89, 25);
+		lblHesapTr.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		panel.add(lblHesapTr);
+		
+		JButton button = new JButton("Ekle");
+		button.setBounds(526, 279, 177, 29);
+		button.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		panel.add(button);
+		
+		JLabel lblTcNo = new JLabel("Tc No");
+		lblTcNo.setBounds(526, 319, 89, 25);
+		lblTcNo.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		panel.add(lblTcNo);
+		
+		textField_3 = new JTextField();
+		textField_3.setBounds(526, 355, 177, 25);
+		textField_3.setColumns(10);
+		panel.add(textField_3);
+		
+		JButton btnkar = new JButton("\u00C7\u0131kar");
+		btnkar.setBounds(526, 391, 177, 29);
+		btnkar.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		panel.add(btnkar);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 109, 490, 309);
+		panel.add(scrollPane);
+		
+		table = new JTable(hesapModel);
+		scrollPane.setViewportView(table);
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				try {
+					textField_3.setText(table.getValueAt(table.getSelectedRow(), 0).toString());
+				} catch (Exception ex) {
+
+				}
+			}
+		});
+		
+		table.getModel().addTableModelListener(new TableModelListener() {
+			
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				if (e.getType() == TableModelEvent.UPDATE) {
+					String selectTcno = table.getValueAt(table.getSelectedRow(), 0).toString();
+					String selectBakiye = table.getValueAt(table.getSelectedRow(), 1).toString();
+					String selectIban = table.getValueAt(table.getSelectedRow(), 2).toString();
+					String selectHesapTürü = table.getValueAt(table.getSelectedRow(), 3).toString();
+
+					try {
+						boolean control = hesap.updateHesap(selectTcno, selectBakiye, selectIban, selectHesapTürü);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		
+	
+	}
+
+}

@@ -1,0 +1,30 @@
+package Model;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class Kart {
+
+	String kartTipi,kartNumarası,kartŞifresi,kartBorcu,kartLimiti;
+
+	public Kart(String kartTipi, String kartNumarası, String kartŞifresi, String kartBorcu, String kartLimiti) {
+		super();
+		this.kartTipi = kartTipi;
+		this.kartNumarası = kartNumarası;
+		this.kartŞifresi = kartŞifresi;
+		this.kartBorcu = kartBorcu;
+		this.kartLimiti = kartLimiti;
+	}
+
+	public Kart() {
+		// TODO Auto-generated constructor stub
+	}
+	
+
+
+	
+	
+	
+	
+}

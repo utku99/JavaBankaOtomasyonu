@@ -1,0 +1,109 @@
+package GUI;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import Helper.DBConnection;
+import Helper.Helper;
+import Model.Kart;
+import Model.Personel;
+
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class KartGUI extends JFrame {
+
+	static Kart kart=new Kart();
+	static DBConnection conn = new DBConnection();
+	private JPanel contentPane;
+	private JTextField textField;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					KartGUI frame = new KartGUI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public KartGUI() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		
+		try {
+			Connection con = conn.connDb();
+			java.sql.Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM kart WHERE kartid='1' ");
+			while (rs.next()) {
+				JOptionPane.showMessageDialog(null,"Borcunuz: " + rs.getString("borç") + " TL");
+			}
+		} catch (SQLException e1) {
+
+			e1.printStackTrace();
+		}
+		
+		
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lbldemeYapmakIstediiniz = new JLabel("\u00D6deme Yapmak \u0130stedi\u011Finiz Kart\u0131n Numaras\u0131n\u0131 Girin");
+		lbldemeYapmakIstediiniz.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
+		lbldemeYapmakIstediiniz.setBounds(33, 41, 379, 34);
+		contentPane.add(lbldemeYapmakIstediiniz);
+		
+		textField = new JTextField();
+		textField.setBounds(112, 97, 192, 34);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		
+		JButton btnde = new JButton("\u00D6de");
+		btnde.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Connection con=conn.connDb();
+					java.sql.Statement st=con.createStatement();
+					ResultSet rs=st.executeQuery("SELECT * FROM kart WHERE kartid='1'");
+					while(rs.next()) {
+						if(textField.getText().equals(rs.getString("borç"))) {
+							JOptionPane.showMessageDialog(null, "kredi borcunuz ödenmiþtir");
+							
+						}
+					}
+				} catch (SQLException e1) {
+			
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		btnde.setBounds(135, 153, 148, 34);
+		contentPane.add(btnde);
+	}
+}

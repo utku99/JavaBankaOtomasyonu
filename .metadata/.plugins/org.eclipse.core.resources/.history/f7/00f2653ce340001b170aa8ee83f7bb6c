@@ -1,0 +1,77 @@
+package Model;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import Helper.DBConnection;
+
+public class Hesap{
+	DBConnection conn=new DBConnection();
+	String tcno,bakiye,iban,hesaptürü;
+
+	
+	public Hesap(String tcno, String bakiye, String iban, String hesaptürü) {
+		this.tcno = tcno;
+		this.bakiye = bakiye;
+		this.iban = iban;
+		this.hesaptürü = hesaptürü;
+	}
+
+
+	public ArrayList<Hesap> getHesapList() throws SQLException {
+		ArrayList<Hesap> list = new ArrayList<>();
+		Connection con = conn.connDb();
+		Statement st = null;
+		ResultSet rs = null;
+		Hesap obj;
+		try {
+			st = con.createStatement();
+			rs = st.executeQuery("SELECT * FROM hesap WHERE tcno = '2'");
+			while (rs.next()) {
+				obj = new Hesap(rs.getString("tcno"), rs.getString("bakiye"), rs.getString("iban"),rs.getString("hesaptürü"));
+				list.add(obj);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			st.close();
+			rs.close();
+			con.close();
+		}
+		return list;
+	}
+	
+	
+	public boolean updateHesap(String tcno,String bakiye, String iban, String hesaptürü) throws SQLException {
+		Connection con = conn.connDb();
+		Statement st = null;
+		ResultSet rs = null;
+		PreparedStatement preparedStatement = null;
+		String query = "UPDATE hesap SET bakiye =?,iban=?,hesaptürü=? WHERE tcno=?";
+		boolean key = false;
+		try {
+			st = con.createStatement();
+			preparedStatement = con.prepareStatement(query);
+			preparedStatement.setString(1, bakiye);
+			preparedStatement.setString(2, iban);
+			preparedStatement.setString(3, hesaptürü);
+			preparedStatement.setString(4, tcno);
+			preparedStatement.executeUpdate();
+			key = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (key)
+			return true;
+		else
+			return false;
+	}
+	
+	
+	
+}

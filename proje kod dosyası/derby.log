@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Mon Jan 04 16:45:28 EET 2021:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0176-cda5-4009-00000a63edb8 
+on database directory C:\Users\pc\Desktop\UTKU_AKSOY_1306180007_NYPproje\proje kod dosyasý\Db with class loader sun.misc.Launcher$AppClassLoader@7d4991ad 
+Loaded from file:/C:/Users/pc/Desktop/UTKU_AKSOY_1306180007_NYPproje/proje%20kod%20dosyas%c4%b1/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_261-b12
+user.dir=C:\Users\pc\Desktop\UTKU_AKSOY_1306180007_NYPproje\proje kod dosyasý
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

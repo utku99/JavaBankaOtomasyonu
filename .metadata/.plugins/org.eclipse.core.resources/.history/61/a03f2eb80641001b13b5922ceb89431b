@@ -1,0 +1,7 @@
+package Model;
+
+public class Kart {
+
+	String kartTipi,kartNumarası,kartŞifresi,kartBorcu,kartLimiti;
+	
+}

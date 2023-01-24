@@ -1,0 +1,178 @@
+package View;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.Statement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.SwingConstants;
+import java.awt.Color;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JPasswordField;
+import Helper.*;
+import Model.Admin;
+
+public class LoginGUI extends JFrame {
+
+	private JPanel W_pane;
+	private JTextField fld_müþteriTc;
+	private JTextField fld_müþteriPass;
+	private JTextField fld_personelTc;
+	private JPasswordField fld_personelPass;
+	private DBConnection conn=new DBConnection();
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					LoginGUI frame = new LoginGUI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public LoginGUI() {
+		setResizable(false);
+		setTitle("Banka Otomasyonu");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 500, 400);
+		W_pane = new JPanel();
+		W_pane.setBackground(Color.WHITE);
+		W_pane.setForeground(Color.BLACK);
+		W_pane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(W_pane);
+		W_pane.setLayout(null);
+		
+		JLabel lbl_logo = new JLabel(new ImageIcon(getClass().getResource("indir.png")));
+		lbl_logo.setBounds(189, 11, 116, 113);
+		W_pane.add(lbl_logo);
+		
+		JLabel lblBankaOtomasyonunaHogeldiniz = new JLabel("Banka Otomasyonuna Ho\u015Fgeldiniz");
+		lblBankaOtomasyonunaHogeldiniz.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 17));
+		lblBankaOtomasyonunaHogeldiniz.setBounds(111, 122, 271, 30);
+		W_pane.add(lblBankaOtomasyonunaHogeldiniz);
+		
+		JTabbedPane W_tabpane = new JTabbedPane(JTabbedPane.TOP);
+		W_tabpane.setBounds(10, 152, 463, 196);
+		W_pane.add(W_tabpane);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(Color.WHITE);
+		W_tabpane.addTab("Müþteri Giriþi", null, panel, null);
+		panel.setLayout(null);
+		
+		JLabel lblTcNumaranz = new JLabel("T.C Numaran\u0131z:");
+		lblTcNumaranz.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 17));
+		lblTcNumaranz.setBounds(10, 11, 139, 30);
+		panel.add(lblTcNumaranz);
+		
+		JLabel lblifre = new JLabel("\u015Eifre:");
+		lblifre.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 17));
+		lblifre.setBounds(10, 59, 139, 30);
+		panel.add(lblifre);
+		
+		fld_müþteriTc = new JTextField();
+		fld_müþteriTc.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		fld_müþteriTc.setBounds(156, 11, 283, 30);
+		panel.add(fld_müþteriTc);
+		fld_müþteriTc.setColumns(10);
+		
+		fld_müþteriPass = new JTextField();
+		fld_müþteriPass.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		fld_müþteriPass.setBounds(156, 52, 283, 30);
+		panel.add(fld_müþteriPass);
+		fld_müþteriPass.setColumns(10);
+		
+		JButton btn_register = new JButton("Kay\u0131t Ol");
+		btn_register.setBounds(10, 100, 200, 30);
+		panel.add(btn_register);
+		
+		JButton btn_müþteriLogin = new JButton("Giri\u015F Yap");
+		btn_müþteriLogin.setBounds(239, 100, 200, 30);
+		panel.add(btn_müþteriLogin);
+		
+		JPanel W_personelLogin = new JPanel();
+		W_tabpane.addTab("Personel Giriþi", null, W_personelLogin, null);
+		W_personelLogin.setLayout(null);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setLayout(null);
+		panel_1.setBackground(Color.WHITE);
+		panel_1.setBounds(0, 0, 458, 168);
+		W_personelLogin.add(panel_1);
+		
+		JLabel label = new JLabel("T.C Numaran\u0131z:");
+		label.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 17));
+		label.setBounds(10, 11, 139, 30);
+		panel_1.add(label);
+		
+		JLabel label_1 = new JLabel("\u015Eifre:");
+		label_1.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 17));
+		label_1.setBounds(10, 59, 139, 30);
+		panel_1.add(label_1);
+		
+		fld_personelTc = new JTextField();
+		fld_personelTc.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		fld_personelTc.setColumns(10);
+		fld_personelTc.setBounds(156, 11, 283, 30);
+		panel_1.add(fld_personelTc);
+		
+		JButton btn_personelLogin = new JButton("Giri\u015F Yap");
+		btn_personelLogin.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(fld_personelTc.getText().length()==0 || fld_personelPass.getText().length()==0) {
+					Helper.showMsg("fill");
+				}else {
+					try {
+						Connection con=conn.connDb();
+						Statement st=(Statement) con.createStatement();
+						ResultSet rs=((java.sql.Statement) st).executeQuery("SELECT * FROM user");
+						while(rs.next()) {
+							if(fld_personelTc.getText().equals(rs.getString("tcno")) && fld_personelPass.getText().equals(rs.getString("password"))) {
+								Admin admin=new Admin();
+								admin.setId(rs.getInt("id"));
+								admin.setPassword("password");
+								admin.setTcno(rs.getString("tcno"));
+								admin.setName(rs.getString("name"));
+								admin.setType(rs.getString("type"));
+							}
+						}
+					} catch (SQLException e1) {
+				
+						e1.printStackTrace();
+					}
+					
+				}
+			}
+		});
+		btn_personelLogin.setBounds(10, 100, 429, 30);
+		panel_1.add(btn_personelLogin);
+		
+		fld_personelPass = new JPasswordField();
+		fld_personelPass.setBounds(156, 52, 283, 30);
+		panel_1.add(fld_personelPass);
+	}
+}

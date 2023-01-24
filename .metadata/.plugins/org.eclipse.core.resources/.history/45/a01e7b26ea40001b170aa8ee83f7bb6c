@@ -1,0 +1,172 @@
+package Model;
+
+import java.sql.Connection;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import Helper.DBConnection;
+
+public class Hesap{
+	DBConnection conn=new DBConnection();
+	String tcno,bakiye,iban,hesaptürü;
+
+	
+	public Hesap(String tcno, String bakiye, String iban, String hesaptürü) {
+		this.tcno = tcno;
+		this.bakiye = bakiye;
+		this.iban = iban;
+		this.hesaptürü = hesaptürü;
+	}
+
+
+	public Hesap() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+
+
+	public String getTcno() {
+		return tcno;
+	}
+
+
+	public void setTcno(String tcno) {
+		this.tcno = tcno;
+	}
+
+
+	public String getBakiye() {
+		return bakiye;
+	}
+
+
+	public void setBakiye(String bakiye) {
+		this.bakiye = bakiye;
+	}
+
+
+	public String getIban() {
+		return iban;
+	}
+
+
+	public void setIban(String iban) {
+		this.iban = iban;
+	}
+
+
+	public String getHesaptürü() {
+		return hesaptürü;
+	}
+
+
+	public void setHesaptürü(String hesaptürü) {
+		this.hesaptürü = hesaptürü;
+	}
+
+
+	public ArrayList<Hesap> getHesapList() throws SQLException {
+		ArrayList<Hesap> list = new ArrayList<>();
+		Connection con = conn.connDb();
+		Statement st = null;
+		ResultSet rs = null;
+		Hesap obj;
+		try {
+			st = con.createStatement();
+			rs = st.executeQuery("SELECT * FROM hesap WHERE tcno = '2'");
+			while (rs.next()) {
+				obj = new Hesap(rs.getString("tcno"), rs.getString("bakiye"), rs.getString("iban"),rs.getString("hesaptürü"));
+				list.add(obj);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			st.close();
+			rs.close();
+			con.close();
+		}
+		return list;
+	}
+	
+	public boolean addHesap(String bakiye, String hesaptürü, String iban) throws SQLException {
+		Connection con = conn.connDb();
+		Statement st = null;
+		ResultSet rs = null;
+		PreparedStatement preparedStatement = null;
+		String query = "INSERT INTO hesap" + "(tcno,bakiye,iban,hesaptürü) VALUES" + "(?,?,?,?)";
+		boolean key = false;
+		try {
+			st = con.createStatement();
+			preparedStatement = con.prepareStatement(query);
+			preparedStatement.setString(1, tcno);
+			preparedStatement.setString(2, bakiye);
+			preparedStatement.setString(3, iban);
+			preparedStatement.setString(4, "hesaptürü");
+			preparedStatement.executeUpdate();
+			key = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (key)
+			return true;
+		else
+			return false;
+	}
+	
+	public boolean updateHesap(String tcno,String bakiye, String iban, String hesaptürü) throws SQLException {
+		Connection con = conn.connDb();
+		Statement st = null;
+		ResultSet rs = null;
+		PreparedStatement preparedStatement = null;
+		String query = "UPDATE hesap SET bakiye =?,iban=?,hesaptürü=? WHERE tcno=?";
+		boolean key = false;
+		try {
+			st = con.createStatement();
+			preparedStatement = con.prepareStatement(query);
+			preparedStatement.setString(1, bakiye);
+			preparedStatement.setString(2, iban);
+			preparedStatement.setString(3, hesaptürü);
+			preparedStatement.setString(4, tcno);
+			preparedStatement.executeUpdate();
+			key = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (key)
+			return true;
+		else
+			return false;
+	}
+	
+	public boolean deleteHesap(int id) throws SQLException {
+		Connection con = conn.connDb();
+		Statement st = null;
+		ResultSet rs = null;
+		PreparedStatement preparedStatement = null;
+		String query = "DELETE FROM hesap WHERE tcno=?";
+		boolean key = false;
+		try {
+			st = con.createStatement();
+			preparedStatement = con.prepareStatement(query);
+			preparedStatement.setInt(1, id);
+			preparedStatement.executeUpdate();
+			key = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (key)
+			return true;
+		else
+			return false;
+	}
+	
+	
+}

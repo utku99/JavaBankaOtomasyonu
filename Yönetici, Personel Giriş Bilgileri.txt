@@ -1,0 +1,11 @@
+yönetici girişi
+isim: y
+şifre: 1
+
+personel girişi
+isim: p
+şifre: 1
+
+- Eclipse ortamında kodlama yaptım. Eclipseden workspace olarak "banka otomasyonu" klasörünü açınca database otomatik olarak geliyor.
+- Database location "...\Desktop\banka otomasyonu\proje kod dosyası\Db" olmalı.
+

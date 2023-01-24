@@ -1,0 +1,58 @@
+package Model;
+
+public class Kart {
+
+	String kartTipi,kartNumarası,kartŞifresi,kartBorcu,kartLimiti;
+
+	public Kart(String kartTipi, String kartNumarası, String kartŞifresi, String kartBorcu, String kartLimiti) {
+		super();
+		this.kartTipi = kartTipi;
+		this.kartNumarası = kartNumarası;
+		this.kartŞifresi = kartŞifresi;
+		this.kartBorcu = kartBorcu;
+		this.kartLimiti = kartLimiti;
+	}
+
+	public String getKartTipi() {
+		return kartTipi;
+	}
+
+	public void setKartTipi(String kartTipi) {
+		this.kartTipi = kartTipi;
+	}
+
+	public String getKartNumarası() {
+		return kartNumarası;
+	}
+
+	public void setKartNumarası(String kartNumarası) {
+		this.kartNumarası = kartNumarası;
+	}
+
+	public String getKartŞifresi() {
+		return kartŞifresi;
+	}
+
+	public void setKartŞifresi(String kartŞifresi) {
+		this.kartŞifresi = kartŞifresi;
+	}
+
+	public String getKartBorcu() {
+		return kartBorcu;
+	}
+
+	public void setKartBorcu(String kartBorcu) {
+		this.kartBorcu = kartBorcu;
+	}
+
+	public String getKartLimiti() {
+		return kartLimiti;
+	}
+
+	public void setKartLimiti(String kartLimiti) {
+		this.kartLimiti = kartLimiti;
+	}
+	
+	
+	
+}

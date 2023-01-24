@@ -1,0 +1,311 @@
+package View;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import org.mariadb.jdbc.internal.com.read.resultset.UpdatableResultSet;
+
+import Model.*;
+
+import java.awt.Color;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+
+import java.awt.Font;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+import Helper.*;
+import javax.swing.JComboBox;
+
+public class AdminGUI extends JFrame {
+
+	static Admin admin = new Admin();
+	Clinic clinic = new Clinic();
+	private JPanel w_pane;
+	private JTextField fld_pName;
+	private JTextField fld_pTcno;
+	private JTextField fld_pPass;
+	private JTextField fld_personelID;
+	private JTable table_personel;
+	private DefaultTableModel personelModel = null;
+	private Object[] personelData = null;
+	private JTextField fld_clinicName;
+	private DefaultTableModel clinicModel = null;
+	private Object[] clinicData = null;
+	private JTable table_clinic;
+	private JPopupMenu clinicMenu;
+	private JTable table_worker;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminGUI frame = new AdminGUI(admin);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 * 
+	 * @throws SQLException
+	 */
+	public AdminGUI(Admin admin) throws SQLException {
+
+		personelModel = new DefaultTableModel();
+		Object[] colPersonelName = new Object[4];
+		colPersonelName[0] = "ID";
+		colPersonelName[1] = "Ad Soyad";
+		colPersonelName[2] = "TC No";
+		colPersonelName[3] = "Þifre";
+		personelModel.setColumnIdentifiers(colPersonelName);
+		personelData = new Object[4];
+		for (int i = 0; i < admin.getPersonelList().size(); i++) {
+			personelData[0] = admin.getPersonelList().get(i).getId();
+			personelData[1] = admin.getPersonelList().get(i).getName();
+			personelData[2] = admin.getPersonelList().get(i).getTcno();
+			personelData[3] = admin.getPersonelList().get(i).getPassword();
+			personelModel.addRow(personelData);
+		}
+
+		clinicModel = new DefaultTableModel();
+		Object[] colClinic = new Object[2];
+		colClinic[0] = "ID";
+		colClinic[1] = "Poliklinik adý";
+		clinicModel.setColumnIdentifiers(colClinic);
+		clinicData = new Object[2];
+		for (int i = 0; i < clinic.getList().size(); i++) {
+			clinicData[0] = clinic.getList().get(i).getId();
+			clinicData[1] = clinic.getList().get(i).getName();
+			clinicModel.addRow(clinicData);
+		}
+		
+		DefaultTableModel workerModel=new DefaultTableModel();
+		Object[] colworker=new Object[2];
+		colworker[0]="ID";
+		colworker[1]="Ad Soyad";
+		workerModel.setColumnIdentifiers(colworker);
+		Object[] workerData=new Object[2];
+		
+		
+		setTitle("Admin Yönetim Sistemi");
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 750, 500);
+		w_pane = new JPanel();
+		w_pane.setBackground(Color.WHITE);
+		w_pane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(w_pane);
+		w_pane.setLayout(null);
+
+		JLabel lblNewLabel = new JLabel("Hoþgeldiniz, Sayýn " + admin.getName());
+		lblNewLabel.setBounds(10, 11, 283, 24);
+		lblNewLabel.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
+		w_pane.add(lblNewLabel);
+
+		JTabbedPane w_tab = new JTabbedPane(JTabbedPane.TOP);
+		w_tab.setBounds(10, 90, 713, 359);
+		w_pane.add(w_tab);
+
+		JPanel w_personel = new JPanel();
+		w_personel.setBackground(Color.WHITE);
+		w_personel.setToolTipText("");
+		w_tab.addTab("Personel Yönetimi", null, w_personel, null);
+		w_personel.setLayout(null);
+
+		JLabel label = new JLabel("Ad Soyad");
+		label.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		label.setBounds(508, 11, 89, 25);
+		w_personel.add(label);
+
+		fld_pName = new JTextField();
+		fld_pName.setBounds(508, 36, 177, 25);
+		w_personel.add(fld_pName);
+		fld_pName.setColumns(10);
+
+		JLabel label_1 = new JLabel("T.C. No");
+		label_1.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		label_1.setBounds(508, 62, 89, 25);
+		w_personel.add(label_1);
+
+		fld_pTcno = new JTextField();
+		fld_pTcno.setColumns(10);
+		fld_pTcno.setBounds(508, 87, 177, 25);
+		w_personel.add(fld_pTcno);
+
+		JLabel label_2 = new JLabel("\u015Eifre");
+		label_2.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		label_2.setBounds(508, 111, 89, 25);
+		w_personel.add(label_2);
+
+		fld_pPass = new JTextField();
+		fld_pPass.setColumns(10);
+		fld_pPass.setBounds(508, 136, 177, 25);
+		w_personel.add(fld_pPass);
+
+		JButton btn_addPersonel = new JButton("Ekle");
+		btn_addPersonel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (fld_pName.getText().length() == 0 || fld_pPass.getText().length() == 0
+						|| fld_pTcno.getText().length() == 0) {
+					Helper.showMsg("fill");
+				} else {
+					try {
+						boolean control = admin.addPersonel(fld_pTcno.getText(), fld_pPass.getText(),
+								fld_pName.getText());
+						if (control) {
+							Helper.showMsg("succes");
+							fld_pName.setText(null);
+							fld_pTcno.setText(null);
+							fld_pPass.setText(null);
+							updatePersonelModel();
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+
+		btn_addPersonel.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		btn_addPersonel.setBounds(508, 172, 177, 29);
+		w_personel.add(btn_addPersonel);
+
+		JLabel label_3 = new JLabel("Kullan\u0131c\u0131 ID");
+		label_3.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		label_3.setBounds(508, 212, 89, 25);
+		w_personel.add(label_3);
+
+		fld_personelID = new JTextField();
+		fld_personelID.setColumns(10);
+		fld_personelID.setBounds(508, 238, 177, 25);
+		w_personel.add(fld_personelID);
+
+		JButton btn_delPersonel = new JButton("Sil");
+		btn_delPersonel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (fld_personelID.getText().length() == 0) {
+					Helper.showMsg("Lütfen geçerli bir doktor seçiniz");
+				} else {
+					int selectID = Integer.parseInt(fld_personelID.getText());
+					try {
+						boolean control = admin.deletePersonel(selectID);
+						if (control) {
+							Helper.showMsg("succes");
+							fld_personelID.setText(null);
+							updatePersonelModel();
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+
+			}
+		});
+		btn_delPersonel.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		btn_delPersonel.setBounds(508, 274, 177, 29);
+		w_personel.add(btn_delPersonel);
+
+		JScrollPane w_scrollPersonel = new JScrollPane();
+		w_scrollPersonel.setBounds(10, 11, 490, 309);
+		w_personel.add(w_scrollPersonel);
+
+		table_personel = new JTable(personelModel);
+		w_scrollPersonel.setViewportView(table_personel);
+		table_personel.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				try {
+					fld_personelID.setText(table_personel.getValueAt(table_personel.getSelectedRow(), 0).toString());
+				} catch (Exception ex) {
+
+				}
+
+			}
+		});
+
+		table_personel.getModel().addTableModelListener(new TableModelListener() {
+
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				if (e.getType() == TableModelEvent.UPDATE) {
+					int selectID = Integer
+							.parseInt(table_personel.getValueAt(table_personel.getSelectedRow(), 0).toString());
+					String selectName = table_personel.getValueAt(table_personel.getSelectedRow(), 1).toString();
+					String selectTcno = table_personel.getValueAt(table_personel.getSelectedRow(), 2).toString();
+					String selectPass = table_personel.getValueAt(table_personel.getSelectedRow(), 3).toString();
+
+					try {
+						boolean control = admin.updatePersonel(selectID, selectTcno, selectPass, selectName);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+
+			}
+		});
+
+
+	}
+
+	public void updatePersonelModel() throws SQLException {
+		DefaultTableModel clearModel = (DefaultTableModel) table_personel.getModel();
+		clearModel.setRowCount(0);
+		for (int i = 0; i < admin.getPersonelList().size(); i++) {
+			personelData[0] = admin.getPersonelList().get(i).getId();
+			personelData[1] = admin.getPersonelList().get(i).getName();
+			personelData[2] = admin.getPersonelList().get(i).getTcno();
+			personelData[3] = admin.getPersonelList().get(i).getPassword();
+			personelModel.addRow(personelData);
+		}
+	}
+
+	public void updateClinicModel() throws SQLException {
+		DefaultTableModel clearModel = (DefaultTableModel) table_clinic.getModel();
+		clearModel.setRowCount(0);
+		for (int i = 0; i < clinic.getList().size(); i++) {
+			clinicData[0] = clinic.getList().get(i).getId();
+			clinicData[1] = clinic.getList().get(i).getName();
+			clinicModel.addRow(clinicData);
+		}
+	}
+}

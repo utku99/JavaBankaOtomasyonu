@@ -1,0 +1,904 @@
+package GUI;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
+
+import Helper.Helper;
+import Model.Cep;
+import Model.Fatura;
+import Model.Hesap;
+import Model.Kart;
+import Model.Müþteri;
+import Model.Personel;
+import Model.Yönetici;
+import javax.swing.SwingConstants;
+import javax.swing.JComboBox;
+
+public class PersonelGUI extends JFrame {
+
+	static Müþteri müþteri = new Müþteri();
+	static Hesap hesap = new Hesap();
+	static Fatura fatura = new Fatura();
+	static Cep cep = new Cep();
+	static Kart kart = new Kart();
+
+	private DefaultTableModel müþteriModel = null;
+	private Object[] müþteriData = null;
+	private DefaultTableModel hesapModel = null;
+	private Object[] hesapData = null;
+	private DefaultTableModel faturaModel = null;
+	private Object[] faturaData = null;
+	private DefaultTableModel cepModel = null;
+	private Object[] cepData = null;
+	private DefaultTableModel kartModel = null;
+	private Object[] kartData = null;
+
+	private JPanel contentPane;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTable table;
+	private JTextField textField_3;
+	private JTextField textField_4;
+	private JTable table_1;
+	private JTextField iban_sil;
+	private JTextField iban_ekle;
+	private JTextField textField_9;
+	private JTextField fatura_sil;
+	private JTextField fatura_ekle;
+	private JTable table_2;
+	private JTextField cep_sil;
+	private JTextField cep_ekle;
+	private JTextField numara_ekle;
+	private JTable table_3;
+	private JTextField textField_6;
+	private JTextField textField_7;
+	private JTextField textField_8;
+	private JTextField textField_10;
+	private JTextField textField_11;
+	private JTable table_4;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					PersonelGUI frame = new PersonelGUI(müþteri);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 * 
+	 * @throws SQLException
+	 */
+	public PersonelGUI(Müþteri müþteri) throws SQLException {
+
+		müþteriModel = new DefaultTableModel();
+		Object[] colMüþteri = new Object[5];
+		colMüþteri[0] = "MÜÞTERÝ_ID";
+		colMüþteri[1] = "ÝSÝM";
+		colMüþteri[2] = "TCNO";
+		colMüþteri[3] = "ADRES";
+		colMüþteri[4] = "MÜÞTERÝ_NUMARASI";
+		müþteriModel.setColumnIdentifiers(colMüþteri);
+		müþteriData = new Object[5];
+		for (int i = 0; i < müþteri.getList().size(); i++) {
+			müþteriData[0] = müþteri.getList().get(i).getMüþteri_id();
+			müþteriData[1] = müþteri.getList().get(i).getIsim();
+			müþteriData[2] = müþteri.getList().get(i).getTcno();
+			müþteriData[3] = müþteri.getList().get(i).getAdres();
+			müþteriData[4] = müþteri.getList().get(i).getMüþteri_numarasý();
+			müþteriModel.addRow(müþteriData);
+		}
+
+		hesapModel = new DefaultTableModel();
+		Object[] colHesap = new Object[3];
+		colHesap[0] = "HESAP_ID";
+		colHesap[1] = "ÝBAN";
+		colHesap[2] = "TYPE";
+		hesapModel.setColumnIdentifiers(colHesap);
+		hesapData = new Object[4];
+		for (int i = 0; i < hesap.getList().size(); i++) {
+			hesapData[0] = hesap.getList().get(i).getHesap_id();
+			hesapData[1] = hesap.getList().get(i).getIban();
+			hesapData[2] = hesap.getList().get(i).getType();
+			hesapModel.addRow(hesapData);
+		}
+
+		faturaModel = new DefaultTableModel();
+		Object[] colFatura = new Object[1];
+		colFatura[0] = "FATURA_ID";
+		faturaModel.setColumnIdentifiers(colFatura);
+		faturaData = new Object[1];
+		for (int i = 0; i < fatura.getList().size(); i++) {
+			faturaData[0] = fatura.getList().get(i).getFatura_id();
+			faturaModel.addRow(faturaData);
+		}
+
+		cepModel = new DefaultTableModel();
+		Object[] colCep = new Object[2];
+		colCep[0] = "CEP_ID";
+		colCep[1] = "NUMARA";
+		cepModel.setColumnIdentifiers(colCep);
+		cepData = new Object[2];
+		for (int i = 0; i < cep.getList().size(); i++) {
+			cepData[0] = cep.getList().get(i).getCep_id();
+			cepData[1] = cep.getList().get(i).getNumara();
+			cepModel.addRow(cepData);
+		}
+
+		kartModel = new DefaultTableModel();
+		Object[] colKart = new Object[5];
+		colKart[0] = "KART_ID";
+		colKart[1] = "KART_NUMARASI";
+		colKart[2] = "ÞÝFRE";
+		colKart[3] = "LÝMÝT";
+		colKart[4] = "TYPE";
+		kartModel.setColumnIdentifiers(colKart);
+		kartData = new Object[5];
+		for (int i = 0; i < kart.getList().size(); i++) {
+			kartData[0] = kart.getList().get(i).getKart_id();
+			kartData[1] = kart.getList().get(i).getKart_numarasý();
+			kartData[2] = kart.getList().get(i).getÞifre();
+			kartData[3] = kart.getList().get(i).getLimit();
+			kartData[4] = kart.getList().get(i).getType();
+			kartModel.addRow(kartData);
+		}
+
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 886, 500);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		JLabel label = new JLabel("Ho\u015Fgeldiniz");
+		label.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
+		label.setBounds(10, 29, 283, 24);
+		contentPane.add(label);
+
+		JButton btnk = new JButton("\u00C7\u0131k\u0131\u015F");
+		btnk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
+		btnk.setBounds(755, 29, 105, 23);
+		contentPane.add(btnk);
+
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(10, 84, 850, 366);
+		contentPane.add(tabbedPane);
+
+		JPanel panel = new JPanel();
+		panel.setBackground(Color.WHITE);
+		tabbedPane.addTab("Müþteri Yönetimi", null, panel, null);
+		panel.setLayout(null);
+
+		JLabel lblIsim = new JLabel("\u0130sim");
+		lblIsim.setBounds(529, 11, 89, 25);
+		lblIsim.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		panel.add(lblIsim);
+
+		textField = new JTextField();
+		textField.setBounds(529, 47, 148, 25);
+		textField.setColumns(10);
+		panel.add(textField);
+
+		JButton button = new JButton("Ekle");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (textField.getText().length() == 0 || textField_1.getText().length() == 0) {
+					Helper.showMsg("fill");
+				} else {
+					try {
+						boolean control = müþteri.add(textField.getText(), textField_1.getText(), textField_3.getText(),
+								textField_4.getText());
+						if (control) {
+							Helper.showMsg("succes");
+							textField.setText(null);
+							textField_1.setText(null);
+							textField_3.setText(null);
+							textField_4.setText(null);
+							updateMüþteriModel();
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+
+			}
+		});
+		button.setBounds(529, 155, 306, 29);
+		button.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		panel.add(button);
+
+		JLabel lblTcNo = new JLabel("Tc no");
+		lblTcNo.setBounds(529, 83, 89, 25);
+		lblTcNo.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		panel.add(lblTcNo);
+
+		textField_1 = new JTextField();
+		textField_1.setBounds(529, 119, 148, 25);
+		textField_1.setColumns(10);
+		panel.add(textField_1);
+
+		JLabel lblUserId = new JLabel("M\u00FC\u015Fteri id");
+		lblUserId.setBounds(529, 225, 89, 25);
+		lblUserId.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		panel.add(lblUserId);
+
+		textField_2 = new JTextField();
+		textField_2.setBounds(529, 261, 177, 25);
+		textField_2.setColumns(10);
+		panel.add(textField_2);
+
+		JButton button_1 = new JButton("Sil");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectID = Integer.parseInt(textField_2.getText());
+				try {
+					boolean control = müþteri.delete(selectID);
+					if (control) {
+						Helper.showMsg("succes");
+						textField_2.setText(null);
+						updateMüþteriModel();
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+
+		button_1.setBounds(529, 297, 177, 29);
+		button_1.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		panel.add(button_1);
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 11, 509, 316);
+		panel.add(scrollPane);
+
+		JLabel lblAdres = new JLabel("Adres");
+		lblAdres.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblAdres.setBounds(687, 11, 89, 25);
+		panel.add(lblAdres);
+
+		JLabel lblMteriNumaras = new JLabel("M\u00FC\u015Fteri Numaras\u0131");
+		lblMteriNumaras.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblMteriNumaras.setBounds(687, 83, 148, 25);
+		panel.add(lblMteriNumaras);
+
+		textField_3 = new JTextField();
+		textField_3.setColumns(10);
+		textField_3.setBounds(687, 47, 148, 25);
+		panel.add(textField_3);
+
+		textField_4 = new JTextField();
+		textField_4.setColumns(10);
+		textField_4.setBounds(687, 119, 148, 25);
+		panel.add(textField_4);
+
+		JLabel lblKullancSilmeBlm = new JLabel("\u0130d ile Kullan\u0131c\u0131 Silme");
+		lblKullancSilmeBlm.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblKullancSilmeBlm.setHorizontalAlignment(SwingConstants.CENTER);
+		lblKullancSilmeBlm.setBounds(529, 195, 306, 25);
+		panel.add(lblKullancSilmeBlm);
+
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(Color.WHITE);
+		tabbedPane.addTab("Banka Hesaplarý", null, panel_1, null);
+		panel_1.setLayout(null);
+
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 11, 509, 315);
+		panel_1.add(scrollPane_1);
+
+		JLabel lblHesapId = new JLabel("\u0130ban\r\n");
+		lblHesapId.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblHesapId.setBounds(527, 225, 89, 25);
+		panel_1.add(lblHesapId);
+
+		iban_sil = new JTextField();
+		iban_sil.setColumns(10);
+		iban_sil.setBounds(527, 261, 177, 25);
+		panel_1.add(iban_sil);
+
+		JButton button_2 = new JButton("Sil");
+		button_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String selectIban = iban_sil.getText();
+				try {
+					boolean control = hesap.delete(selectIban);
+					if (control) {
+						Helper.showMsg("succes");
+						iban_sil.setText(null);
+						hesapModel.setRowCount(0);
+						updateHesapModel();
+						updateMüþteriModel();
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		button_2.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		button_2.setBounds(527, 297, 177, 29);
+		panel_1.add(button_2);
+
+		JLabel lblIban = new JLabel("\u0130ban");
+		lblIban.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblIban.setBounds(529, 83, 89, 25);
+		panel_1.add(lblIban);
+
+		iban_ekle = new JTextField();
+		iban_ekle.setColumns(10);
+		iban_ekle.setBounds(529, 119, 148, 25);
+		panel_1.add(iban_ekle);
+
+		JLabel lblType = new JLabel("Hesap Tipi");
+		lblType.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblType.setBounds(687, 83, 89, 25);
+		panel_1.add(lblType);
+
+		String[] type = { "vadeli", "vadesiz", "yatýrým", "döviz" };
+		JComboBox comboBox = new JComboBox(type);
+		comboBox.setBounds(687, 119, 148, 24);
+		panel_1.add(comboBox);
+
+		JButton button_3 = new JButton("Ekle");
+		button_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (iban_ekle.getText().length() == 0 || textField_9.getText().length() == 0) {
+					Helper.showMsg("fill");
+				} else {
+					try {
+						boolean control = hesap.add(Integer.parseInt(textField_9.getText()), iban_ekle.getText(),
+								comboBox.getSelectedItem().toString());
+						if (control) {
+							Helper.showMsg("succes");
+							iban_ekle.setText(null);
+							textField_9.setText(null);
+							hesapModel.setRowCount(0);
+							updateHesapModel();
+							updateMüþteriModel();
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		button_3.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		button_3.setBounds(529, 155, 306, 29);
+		panel_1.add(button_3);
+
+		JLabel lblHesapSilmeBlm = new JLabel("\u0130ban ile Hesap Silme");
+		lblHesapSilmeBlm.setHorizontalAlignment(SwingConstants.CENTER);
+		lblHesapSilmeBlm.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblHesapSilmeBlm.setBounds(529, 195, 306, 25);
+		panel_1.add(lblHesapSilmeBlm);
+
+		textField_9 = new JTextField();
+		textField_9.setColumns(10);
+		textField_9.setBounds(529, 43, 148, 25);
+		panel_1.add(textField_9);
+
+		JLabel lblHesapId_1 = new JLabel("Hesap id");
+		lblHesapId_1.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblHesapId_1.setBounds(529, 11, 89, 25);
+		panel_1.add(lblHesapId_1);
+
+		JPanel panel_2 = new JPanel();
+		panel_2.setBackground(Color.WHITE);
+		tabbedPane.addTab("Hesap Kartlarý", null, panel_2, null);
+		panel_2.setLayout(null);
+
+		JLabel lblType_1 = new JLabel("Type");
+		lblType_1.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblType_1.setBounds(697, 151, 89, 25);
+		panel_2.add(lblType_1);
+
+		textField_6 = new JTextField();
+		textField_6.setColumns(10);
+		textField_6.setBounds(549, 187, 138, 25);
+		panel_2.add(textField_6);
+
+		JLabel lblLimit = new JLabel("Limit");
+		lblLimit.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblLimit.setBounds(549, 157, 89, 25);
+		panel_2.add(lblLimit);
+
+		textField_7 = new JTextField();
+		textField_7.setColumns(10);
+		textField_7.setBounds(549, 302, 148, 25);
+		panel_2.add(textField_7);
+
+		JLabel lblKartNumaras_1 = new JLabel("Kart numaras\u0131");
+		lblKartNumaras_1.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblKartNumaras_1.setBounds(549, 266, 89, 25);
+		panel_2.add(lblKartNumaras_1);
+
+		textField_8 = new JTextField();
+		textField_8.setColumns(10);
+		textField_8.setBounds(697, 121, 138, 25);
+		panel_2.add(textField_8);
+
+		JLabel lblifre = new JLabel("\u015Eifre");
+		lblifre.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblifre.setBounds(697, 85, 89, 25);
+		panel_2.add(lblifre);
+
+		textField_10 = new JTextField();
+		textField_10.setColumns(10);
+		textField_10.setBounds(549, 121, 138, 25);
+		panel_2.add(textField_10);
+
+		JLabel lblKartNumaras = new JLabel("Kart numaras\u0131");
+		lblKartNumaras.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblKartNumaras.setBounds(549, 85, 89, 25);
+		panel_2.add(lblKartNumaras);
+
+		textField_11 = new JTextField();
+		textField_11.setColumns(10);
+		textField_11.setBounds(549, 47, 286, 25);
+		panel_2.add(textField_11);
+
+		JLabel lblKartId = new JLabel("Kart id");
+		lblKartId.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblKartId.setBounds(549, 11, 89, 25);
+		panel_2.add(lblKartId);
+
+		JButton button_7 = new JButton("Ekle");
+		button_7.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		button_7.setBounds(549, 223, 286, 29);
+		panel_2.add(button_7);
+
+		JButton button_8 = new JButton("Sil");
+		button_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String selectKartNumarasý = textField_7.getText();
+				try {
+					boolean control = kart.delete(selectKartNumarasý);
+					if (control) {
+						Helper.showMsg("succes");
+						textField_7.setText(null);
+						kartModel.setRowCount(0);
+						updateKartModel();
+						updateHesapModel();
+						updateMüþteriModel();
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		button_8.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		button_8.setBounds(707, 298, 128, 29);
+		panel_2.add(button_8);
+
+		JScrollPane scrollPane_4 = new JScrollPane();
+		scrollPane_4.setBounds(10, 11, 529, 316);
+		panel_2.add(scrollPane_4);
+
+		String[] type2 = { "banka", "kredi" };
+		JComboBox comboBox_2 = new JComboBox(type2);
+		comboBox_2.setBounds(697, 187, 138, 25);
+		panel_2.add(comboBox_2);
+
+		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(Color.WHITE);
+		tabbedPane.addTab("Faturalar", null, panel_3, null);
+		panel_3.setLayout(null);
+
+		JButton button_4 = new JButton("Sil");
+		button_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectId = Integer.parseInt(fatura_sil.getText());
+				try {
+					boolean control = fatura.delete(selectId);
+					if (control) {
+						Helper.showMsg("succes");
+						fatura_sil.setText(null);
+						faturaModel.setRowCount(0);
+						updateFaturaModel();
+						updateMüþteriModel();
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		button_4.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		button_4.setBounds(427, 298, 177, 29);
+		panel_3.add(button_4);
+
+		fatura_sil = new JTextField();
+		fatura_sil.setColumns(10);
+		fatura_sil.setBounds(427, 262, 177, 25);
+		panel_3.add(fatura_sil);
+
+		JLabel lblFaturaId_1 = new JLabel("Fatura id");
+		lblFaturaId_1.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblFaturaId_1.setBounds(427, 226, 89, 25);
+		panel_3.add(lblFaturaId_1);
+
+		JButton btnEkle = new JButton("Ekle");
+		btnEkle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (fatura_ekle.getText().length() == 0) {
+					Helper.showMsg("fill");
+				} else {
+					try {
+						boolean control = fatura.add(Integer.parseInt(fatura_ekle.getText()));
+						if (control) {
+							Helper.showMsg("succes");
+							fatura_ekle.setText(null);
+							faturaModel.setRowCount(0);
+							updateFaturaModel();
+							updateMüþteriModel();
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		btnEkle.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		btnEkle.setBounds(427, 186, 177, 29);
+		panel_3.add(btnEkle);
+
+		fatura_ekle = new JTextField();
+		fatura_ekle.setColumns(10);
+		fatura_ekle.setBounds(427, 150, 177, 25);
+		panel_3.add(fatura_ekle);
+
+		JLabel lblFaturaId = new JLabel("Fatura id");
+		lblFaturaId.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblFaturaId.setBounds(427, 114, 89, 25);
+		panel_3.add(lblFaturaId);
+
+		JLabel lblNotHerMteri = new JLabel("NOT:  Her m\u00FC\u015Fteri i\u00E7in 1 adet fatura id bulunabilir.");
+		lblNotHerMteri.setFont(new Font("Arial", Font.BOLD, 13));
+		lblNotHerMteri.setBounds(10, 11, 395, 24);
+		panel_3.add(lblNotHerMteri);
+
+		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(10, 46, 395, 281);
+		panel_3.add(scrollPane_2);
+
+		JPanel panel_4 = new JPanel();
+		panel_4.setBackground(Color.WHITE);
+		tabbedPane.addTab("Telefonlar", null, panel_4, null);
+		panel_4.setLayout(null);
+
+		JLabel lblNotHerMteri_1 = new JLabel("NOT: Her m\u00FC\u015Fteri i\u00E7in 1 adet cep id bulunabilir.");
+		lblNotHerMteri_1.setFont(new Font("Arial", Font.BOLD, 13));
+		lblNotHerMteri_1.setBounds(10, 11, 395, 24);
+		panel_4.add(lblNotHerMteri_1);
+
+		JButton button_5 = new JButton("Sil");
+		button_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectId = Integer.parseInt(cep_sil.getText());
+				try {
+					boolean control = cep.delete(selectId);
+					if (control) {
+						Helper.showMsg("succes");
+						cep_sil.setText(null);
+						cepModel.setRowCount(0);
+						updateCepModel();
+						updateMüþteriModel();
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		button_5.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		button_5.setBounds(433, 298, 177, 29);
+		panel_4.add(button_5);
+
+		cep_sil = new JTextField();
+		cep_sil.setColumns(10);
+		cep_sil.setBounds(433, 262, 177, 25);
+		panel_4.add(cep_sil);
+
+		JLabel lblCepId_1 = new JLabel("Cep id");
+		lblCepId_1.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblCepId_1.setBounds(433, 226, 89, 25);
+		panel_4.add(lblCepId_1);
+
+		JButton button_6 = new JButton("Ekle");
+		button_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (cep_ekle.getText().length() == 0 || numara_ekle.getText().length() == 0) {
+					Helper.showMsg("fill");
+				} else {
+					try {
+						boolean control = cep.add(Integer.parseInt(cep_ekle.getText()), numara_ekle.getText());
+						if (control) {
+							Helper.showMsg("succes");
+							cep_ekle.setText(null);
+							numara_ekle.setText(null);
+							cepModel.setRowCount(0);
+							updateCepModel();
+							updateMüþteriModel();
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		button_6.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		button_6.setBounds(433, 186, 376, 29);
+		panel_4.add(button_6);
+
+		cep_ekle = new JTextField();
+		cep_ekle.setColumns(10);
+		cep_ekle.setBounds(433, 150, 177, 25);
+		panel_4.add(cep_ekle);
+
+		JLabel lblCepId = new JLabel("Cep id");
+		lblCepId.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblCepId.setBounds(433, 114, 89, 25);
+		panel_4.add(lblCepId);
+
+		numara_ekle = new JTextField();
+		numara_ekle.setColumns(10);
+		numara_ekle.setBounds(632, 150, 177, 25);
+		panel_4.add(numara_ekle);
+
+		JLabel lblNumara = new JLabel("Numara");
+		lblNumara.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 14));
+		lblNumara.setBounds(632, 114, 89, 25);
+		panel_4.add(lblNumara);
+
+		JScrollPane scrollPane_3 = new JScrollPane();
+		scrollPane_3.setBounds(10, 46, 413, 281);
+		panel_4.add(scrollPane_3);
+
+		table_4 = new JTable(kartModel);
+		scrollPane_4.setViewportView(table_4);
+
+		table_4.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				try {
+					textField_7.setText(table_4.getValueAt(table_4.getSelectedRow(), 1).toString());
+				} catch (Exception ex) {
+
+				}
+
+			}
+		});
+
+		table_4.getModel().addTableModelListener(new TableModelListener() {
+
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				if (e.getType() == TableModelEvent.UPDATE) {
+					int selectId = Integer.parseInt(table_4.getValueAt(table_4.getSelectedRow(), 0).toString());
+					String selectKartNumara = table_4.getValueAt(table_4.getSelectedRow(), 1).toString();
+					String selectÞifre = table_4.getValueAt(table_4.getSelectedRow(), 2).toString();
+					String selectLimit = table_4.getValueAt(table_4.getSelectedRow(), 3).toString();
+					String selectType = table_4.getValueAt(table_4.getSelectedRow(), 4).toString();
+					try {
+						boolean control = kart.update(selectKartNumara, selectÞifre, selectLimit);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+
+			}
+		});
+
+		table_3 = new JTable(cepModel);
+		scrollPane_3.setViewportView(table_3);
+
+		table_3.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				try {
+					cep_sil.setText(table_3.getValueAt(table_3.getSelectedRow(), 0).toString());
+				} catch (Exception ex) {
+
+				}
+
+			}
+		});
+
+		table_3.getModel().addTableModelListener(new TableModelListener() {
+
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				if (e.getType() == TableModelEvent.UPDATE) {
+					int selectId = Integer.parseInt(table_3.getValueAt(table_3.getSelectedRow(), 0).toString());
+					String selectNumara = table_3.getValueAt(table_3.getSelectedRow(), 1).toString();
+					try {
+						boolean control = cep.update(selectId, selectNumara);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+
+			}
+		});
+
+		table_2 = new JTable(faturaModel);
+		scrollPane_2.setViewportView(table_2);
+
+		table_2.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				try {
+					fatura_sil.setText(table_2.getValueAt(table_2.getSelectedRow(), 0).toString());
+				} catch (Exception ex) {
+
+				}
+
+			}
+		});
+
+		table = new JTable(müþteriModel);
+		scrollPane.setViewportView(table);
+
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				try {
+					textField_2.setText(table.getValueAt(table.getSelectedRow(), 0).toString());
+				} catch (Exception ex) {
+
+				}
+
+			}
+		});
+
+		table.getModel().addTableModelListener(new TableModelListener() {
+
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				if (e.getType() == TableModelEvent.UPDATE) {
+					int selectID = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString());
+					String selectÝsim = table.getValueAt(table.getSelectedRow(), 1).toString();
+					String selectTcno = table.getValueAt(table.getSelectedRow(), 2).toString();
+					String selectAdres = table.getValueAt(table.getSelectedRow(), 3).toString();
+					String selectMüþteriNumarasý = table.getValueAt(table.getSelectedRow(), 4).toString();
+					try {
+						boolean control = müþteri.update(selectID, selectÝsim, selectTcno, selectAdres,
+								selectMüþteriNumarasý);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+
+			}
+		});
+
+		table_1 = new JTable(hesapModel);
+		scrollPane_1.setViewportView(table_1);
+
+		JLabel lblNotHesapId_1 = new JLabel(
+				"NOT: Hesap id, fatura id ve telefon id m\u00FC\u015Fteri id ile ; kart id hesap id ile ayn\u0131 olmal\u0131d\u0131r.");
+		lblNotHesapId_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNotHesapId_1.setBounds(181, 15, 580, 38);
+		contentPane.add(lblNotHesapId_1);
+
+		table_1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				try {
+					iban_sil.setText(table_1.getValueAt(table_1.getSelectedRow(), 1).toString());
+				} catch (Exception ex) {
+
+				}
+
+			}
+		});
+
+	}
+
+	public void updateMüþteriModel() throws SQLException {
+		DefaultTableModel clearModel = (DefaultTableModel) table.getModel();
+		clearModel.setRowCount(0);
+		for (int i = 0; i < müþteri.getList().size(); i++) {
+			müþteriData[0] = müþteri.getList().get(i).getMüþteri_id();
+			müþteriData[1] = müþteri.getList().get(i).getIsim();
+			müþteriData[2] = müþteri.getList().get(i).getTcno();
+			müþteriData[3] = müþteri.getList().get(i).getAdres();
+			müþteriData[4] = müþteri.getList().get(i).getMüþteri_numarasý();
+			müþteriModel.addRow(müþteriData);
+		}
+	}
+
+	public void updateHesapModel() throws SQLException {
+		DefaultTableModel clearModel = (DefaultTableModel) table.getModel();
+		clearModel.setRowCount(0);
+		for (int i = 0; i < hesap.getList().size(); i++) {
+			hesapData[0] = hesap.getList().get(i).getHesap_id();
+			hesapData[1] = hesap.getList().get(i).getIban();
+			hesapData[2] = hesap.getList().get(i).getType();
+			hesapModel.addRow(hesapData);
+		}
+	}
+
+	public void updateFaturaModel() throws SQLException {
+		DefaultTableModel clearModel = (DefaultTableModel) table.getModel();
+		clearModel.setRowCount(0);
+		for (int i = 0; i < fatura.getList().size(); i++) {
+			faturaData[0] = fatura.getList().get(i).getFatura_id();
+			faturaModel.addRow(faturaData);
+		}
+	}
+
+	public void updateCepModel() throws SQLException {
+		DefaultTableModel clearModel = (DefaultTableModel) table.getModel();
+		clearModel.setRowCount(0);
+		for (int i = 0; i < cep.getList().size(); i++) {
+			cepData[0] = cep.getList().get(i).getCep_id();
+			cepData[1] = cep.getList().get(i).getNumara();
+			cepModel.addRow(cepData);
+		}
+	}
+
+	public void updateKartModel() throws SQLException {
+		DefaultTableModel clearModel = (DefaultTableModel) table.getModel();
+		clearModel.setRowCount(0);
+		for (int i = 0; i < kart.getList().size(); i++) {
+			kartData[0] = kart.getList().get(i).getKart_id();
+			kartData[1] = kart.getList().get(i).getKart_numarasý();
+			kartData[2] = kart.getList().get(i).getÞifre();
+			kartData[3] = kart.getList().get(i).getLimit();
+			kartData[4] = kart.getList().get(i).getType();
+			kartModel.addRow(kartData);
+		}
+	}
+}

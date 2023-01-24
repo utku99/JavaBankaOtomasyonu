@@ -1,0 +1,273 @@
+package View;
+
+import java.awt.*;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import Helper.DBConnection;
+import Model.Hesap;
+import Model.Personel;
+import Windows.HesaplarGUI;
+
+import javax.swing.JScrollBar;
+import javax.swing.JTextField;
+import javax.swing.JTree;
+import javax.swing.JList;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingConstants;
+import javax.swing.AbstractAction;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.Action;
+
+public class MüþteriGUI extends JFrame {
+
+	private DBConnection conn = new DBConnection();
+	static Hesap hesap=new Hesap();
+	static Personel personel = new Personel();
+	private final Action action = new SwingAction();
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MüþteriGUI frame = new MüþteriGUI(personel);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public MüþteriGUI(Personel personel) {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 750, 500);
+
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBackground(Color.LIGHT_GRAY);
+		setJMenuBar(menuBar);
+
+		JMenu mnNewMenu = new JMenu("Kartl\u0131 \u0130\u015Flem");
+		menuBar.add(mnNewMenu);
+
+		JMenu mnNewMenu_2 = new JMenu("Hesaplar");
+		mnNewMenu.add(mnNewMenu_2);
+
+		JMenuItem mnýtmNewMenuItem_1 = new JMenuItem("Bakiye G\u00F6r\u00FCnt\u00FCleme");
+		mnýtmNewMenuItem_1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Connection con = conn.connDb();
+					java.sql.Statement st = con.createStatement();
+					ResultSet rs = st.executeQuery("SELECT * FROM hesap WHERE tcno = '2'");
+					while (rs.next()) {
+						JOptionPane.showMessageDialog(null,"Bakiyeniz: " + rs.getString("bakiye") + " TL");
+					}
+				} catch (SQLException e1) {
+
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		mnNewMenu_2.add(mnýtmNewMenuItem_1);
+		
+		JMenuItem mnýtmNewMenuItem_5 = new JMenuItem("\u0130ban Bilgisi");
+		mnýtmNewMenuItem_5.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Connection con = conn.connDb();
+					java.sql.Statement st = con.createStatement();
+					ResultSet rs = st.executeQuery("SELECT * FROM hesap WHERE tcno = '2'");
+					while (rs.next()) {
+						JOptionPane.showMessageDialog(null,"Ýban Nonuz: "+" TR " + rs.getString("iban"));
+					}
+				} catch (SQLException e1) {
+
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		mnNewMenu_2.add(mnýtmNewMenuItem_5);
+		
+		
+		JMenuItem mnýtmHesapIlemleri = new JMenuItem("Hesap \u0130\u015Flemleri");
+		mnýtmHesapIlemleri.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				HesaplarGUI hGUI = null;
+				try {
+					hGUI = new HesaplarGUI(hesap);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				hGUI.setVisible(true);
+				
+			}
+		});
+		mnNewMenu_2.add(mnýtmHesapIlemleri);
+
+		JMenu mnNewMenu_3 = new JMenu("\u00D6demeler");
+		mnNewMenu.add(mnNewMenu_3);
+
+		JMenuItem mnýtmNewMenuItem_6 = new JMenuItem("Kredi Kart\u0131 Borcu");
+		mnNewMenu_3.add(mnýtmNewMenuItem_6);
+
+		JMenuItem mnýtmNewMenuItem_7 = new JMenuItem("Cebe TL Y\u00FCkleme");
+		mnNewMenu_3.add(mnýtmNewMenuItem_7);
+
+		JMenu mnNewMenu_15 = new JMenu("Fatura");
+		mnNewMenu_3.add(mnNewMenu_15);
+
+		JMenuItem mnýtmNewMenuItem_8 = new JMenuItem("Do\u011Falgaz");
+		mnNewMenu_15.add(mnýtmNewMenuItem_8);
+
+		JMenuItem mnýtmElektrik = new JMenuItem("Elektrik");
+		mnNewMenu_15.add(mnýtmElektrik);
+
+		JMenuItem mnýtmSu = new JMenuItem("Su");
+		mnNewMenu_15.add(mnýtmSu);
+
+		JMenu mnNewMenu_4 = new JMenu("Kartlar");
+		mnNewMenu.add(mnNewMenu_4);
+
+		JMenuItem mnýtmNewMenuItem_9 = new JMenuItem("New menu item");
+		mnNewMenu_4.add(mnýtmNewMenuItem_9);
+
+		JMenu mnNewMenu_5 = new JMenu("Yat\u0131r\u0131m");
+		mnNewMenu.add(mnNewMenu_5);
+
+		JMenu mnHesapIlemleri = new JMenu("Hesap \u0130\u015Flemleri");
+		mnNewMenu_5.add(mnHesapIlemleri);
+
+		JMenuItem mnýtmHesapAma = new JMenuItem("Hesap A\u00E7ma");
+		mnHesapIlemleri.add(mnýtmHesapAma);
+
+		JMenuItem mnýtmHesapKapatma = new JMenuItem("Hesap Kapatma");
+		mnHesapIlemleri.add(mnýtmHesapKapatma);
+
+		JMenuItem mnýtmParaekme = new JMenuItem("Para \u00C7ekme");
+		mnNewMenu.add(mnýtmParaekme);
+
+		JMenu mnNewMenu_7 = new JMenu("Para Yat\u0131rma");
+		mnNewMenu.add(mnNewMenu_7);
+
+		JMenu mnNewMenu_6 = new JMenu("Ba\u015Fkas\u0131n\u0131n Hesab\u0131na");
+		mnNewMenu_7.add(mnNewMenu_6);
+
+		JMenuItem mnýtmIbanNoIle = new JMenuItem("IBAN ile");
+		mnNewMenu_6.add(mnýtmIbanNoIle);
+
+		JMenuItem mnýtmHesapNoIle = new JMenuItem("Hesap No ile");
+		mnNewMenu_6.add(mnýtmHesapNoIle);
+
+		JMenuItem mnýtmKendiHesabma = new JMenuItem("Kendi Hesab\u0131ma");
+		mnNewMenu_7.add(mnýtmKendiHesabma);
+
+		JMenu mnNewMenu_8 = new JMenu("Para Transferi");
+		mnNewMenu.add(mnNewMenu_8);
+
+		JMenuItem mnýtmNewMenuItem_11 = new JMenuItem("Ba\u015Fka Banka Hesab\u0131na (EFT)");
+		mnNewMenu_8.add(mnýtmNewMenuItem_11);
+
+		JMenu mnNewMenu_9 = new JMenu("Di\u011Fer");
+		mnNewMenu.add(mnNewMenu_9);
+
+		JMenuItem mnýtmKartifreIlemleri = new JMenuItem("Kart \u015Eifre G\u00FCncelleme");
+		mnNewMenu_9.add(mnýtmKartifreIlemleri);
+
+		JMenuItem mnýtmTelefonNumarasGncelleme = new JMenuItem("Telefon Numaras\u0131 G\u00FCncelleme");
+		mnNewMenu_9.add(mnýtmTelefonNumarasGncelleme);
+
+		JMenuItem mnýtmBireyselKrediBavurusu = new JMenuItem("Kredi Ba\u015Fvurusu");
+		mnNewMenu_9.add(mnýtmBireyselKrediBavurusu);
+
+		JMenu mnNewMenu_1 = new JMenu("Karts\u0131z \u0130\u015Flem");
+		menuBar.add(mnNewMenu_1);
+
+		JMenuItem mnýtmNewMenuItem = new JMenuItem("Kredi Ba\u015Fvurusu");
+		mnNewMenu_1.add(mnýtmNewMenuItem);
+
+		JMenuItem mnýtmKrediKartBorcu = new JMenuItem("Kredi Kart\u0131 Borcu \u00D6deme");
+		mnNewMenu_1.add(mnýtmKrediKartBorcu);
+
+		JMenu mnNewMenu_12 = new JMenu("Para Transferi / Yat\u0131rma");
+		mnNewMenu_1.add(mnNewMenu_12);
+
+		JMenu mnHesabnaHavale = new JMenu("Hesab\u0131na Havale");
+		mnNewMenu_12.add(mnHesabnaHavale);
+
+		JMenuItem mnýtmIbanIle = new JMenuItem("IBAN ile");
+		mnHesabnaHavale.add(mnýtmIbanIle);
+
+		JMenuItem mnýtmHesapNoIle_1 = new JMenuItem("Hesap No ile");
+		mnHesabnaHavale.add(mnýtmHesapNoIle_1);
+
+		JMenu mnNewMenu_13 = new JMenu("\u00D6demeler");
+		mnNewMenu_1.add(mnNewMenu_13);
+
+		JMenuItem mnýtmCebeTlYkle = new JMenuItem("Cebe TL Y\u00FCkle");
+		mnNewMenu_13.add(mnýtmCebeTlYkle);
+
+		JMenu mnKretiKartBorcu = new JMenu("Kreti Kart\u0131 Borcu");
+		mnNewMenu_13.add(mnKretiKartBorcu);
+
+		JMenuItem mnýtmMteriNoIle = new JMenuItem("M\u00FC\u015Fteri No ile");
+		mnKretiKartBorcu.add(mnýtmMteriNoIle);
+
+		JMenuItem mnýtmKartNoIle = new JMenuItem("Kart No ile");
+		mnKretiKartBorcu.add(mnýtmKartNoIle);
+
+		JMenu menu = new JMenu("Fatura");
+		mnNewMenu_13.add(menu);
+
+		JMenuItem menuItem = new JMenuItem("Do\u011Falgaz");
+		menu.add(menuItem);
+
+		JMenuItem menuItem_1 = new JMenuItem("Elektrik");
+		menu.add(menuItem_1);
+
+		JMenuItem menuItem_2 = new JMenuItem("Su");
+		menu.add(menuItem_2);
+		getContentPane().setLayout(null);
+	}
+
+	private static void addPopup(Component component, final JPopupMenu popup) {
+	}
+
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "SwingAction");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+}
